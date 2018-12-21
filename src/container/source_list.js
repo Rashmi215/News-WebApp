@@ -1,44 +1,50 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
-import { fetchSourceList } from '../actions';
-
+import { Link } from 'react-router-dom';
 
 class SourceList extends Component{
-
-  componentDidMount(){
-     this.props.fetchSourceList();
+  constructor(props){
+     super(props);
+     this.state = {
+       lists: [],
+       isLoading: true
+     };
   }
 
-  renderList(){
-   let {lists} = this.props;
-   let returnHTML = [];
-   for(let key in lists){
-     lists[key].map((item)=>{
-       returnHTML.push(
-        <li className="list-group-item" key={item.id}>
-            <a href={item.url}>{ item.name }</a>
-        </li>
-       );
-     });
-   }
-   return returnHTML;
-}
+  componentDidMount(){
+    fetch('https://newsapi.org/v2/sources?language=en&country=us&apiKey=596142d46fe246a9a50e1f4bfc71a72d')
+         .then(res => res.json())
+         .then(data => {
+           let list = data.sources.map(source => {
+              let active = source
+              return active
+           })
+           this.setState({ lists: list, isLoading: false })
+         })
+  }
 
   render(){
-    return (
-      <div className = "col-lg-4">
-         <ul className = "list-group">
-         <li className = "list-group-item text-light bg-dark"><h3>Sources</h3></li>
-              {this.renderList()}
-         </ul>
+    const { lists, isLoading } = this.state;
+    return(
+      <div className = 'main-component'>
+        <ul className = 'list-group'>
+          <li className = 'list-group-item text-light bg-dark'><h3>Sources</h3></li>
+        </ul>
+         { isLoading ? (<div><h4>Loading...</h4></div>) : (
+           lists.map(list =>{
+             return(
+               <div>
+                  <ul className = 'list-group'>
+                    <li className = 'list-group-item' key = {list.id}>
+                      <Link to = {`/news/${list.id}`}>{list.name}</Link>
+                    </li>
+                  </ul>
+               </div>
+             );
+           })
+         )}
       </div>
-
     );
   }
 }
 
-function mapStateToProps(state){
-  return { lists: state.sourceList };
-}
-
-export default connect(mapStateToProps, { fetchSourceList })(SourceList);
+export default SourceList;
