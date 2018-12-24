@@ -38,10 +38,10 @@ class SelectedSource extends Component{
            (
              articles.map(article =>{
                return(
-                 <div className="media border p-3">
+                 <div className="media border p-3 bg-light">
                       <img src={article.urlToImage} alt="img" className="mr-3 mt-1" style={{width:80}}/>
                       <div className="media-body">
-                        <Link to = {`/news/detail/${article.source.id}/`}>
+                        <Link to = {`/news/detail/${article.title}/`} style={{color:'black'}}>
                           <h4>{ article.title } <br/><small><i>{ article.publishedAt }</i></small></h4>
                         </Link>
                       </div>

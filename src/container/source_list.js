@@ -6,7 +6,8 @@ class SourceList extends Component{
      super(props);
      this.state = {
        lists: [],
-       isLoading: true
+       isLoading: true,
+       error: null
      };
   }
 
@@ -20,7 +21,10 @@ class SourceList extends Component{
            })
            this.setState({ lists: list, isLoading: false })
          })
+         .catch(error => this.setState({ error, isLoading: false }))
   }
+
+  favoriteClick = () =>{};
 
   render(){
     const { lists, isLoading } = this.state;
@@ -34,9 +38,14 @@ class SourceList extends Component{
              return(
                <div>
                   <ul className = 'list-group'>
-                    <li className = 'list-group-item' key = {list.id}>
-                      <Link to = {`/news/${list.id}`}>{list.name}</Link>
+                    <li className = 'list-group-item ' key = {list.id}>
+                      <Link to = {`/news/${list.id}`}>{ list.name }</Link>
+                      <i className="far fa-star "
+                         style={{float:'right'}}
+                         onClick={this.favoriteClick}>
+                      </i>
                     </li>
+
                   </ul>
                </div>
              );

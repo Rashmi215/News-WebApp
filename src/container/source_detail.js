@@ -15,8 +15,8 @@ class DetailSource extends Component{
   }
 
   fetchDetail(){
-     const { id } = this.props.match.params;
-     fetch(`https://newsapi.org/v2/top-headlines?sources=${id}&pageSize=1&apiKey=596142d46fe246a9a50e1f4bfc71a72d`)
+     const { title } = this.props.match.params;
+     fetch(`https://newsapi.org/v2/top-headlines?q=${title}&pageSize=1&apiKey=596142d46fe246a9a50e1f4bfc71a72d`)
      .then(res =>res.json())
      .then(data =>{
        let articles = data.articles.map(article =>{
@@ -39,11 +39,13 @@ class DetailSource extends Component{
         {isLoading ? (<div><h4>Loading...</h4></div>) : (
           articles.map(article =>{
             return(
-              <div>
-                <h4>{ article.title }</h4>
-                <p>{ article.content }</p>
+              <div className="card bg-light" style={{marginTop:'20px'}}>
+                <div className="card-body">
+                  <h4 className="card-title">{ article.title }</h4>
+                  <p className="card-text">{ article.content }</p>
+                </div>
               </div>
-            )
+            );
           })
         )
       }
